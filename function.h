@@ -1,22 +1,22 @@
-#pragma once
-static void setVar(int v); //¸üĞÂ±äÔªvµÄÖµ
-static void unSetVar(int v); //³·»Ø±äÔªvµÄÖµ
-static int dpll(); //DPLLËã·¨
-static void init(); //³õÊ¼»¯Çó½âÆ÷
+ï»¿#pragma once
+static void setVar(int v); //æ›´æ–°å˜å…ƒvçš„å€¼
+static void unSetVar(int v); //æ’¤å›å˜å…ƒvçš„å€¼
+static int dpll(); //DPLLç®—æ³•
+static void init(); //åˆå§‹åŒ–æ±‚è§£å™¨
 
-static int compare(const void* a, const void* b); //°´±äÔª±àºÅ±È½Ï´óĞ¡
-static int computeResolvent(int x, int a, int b, int& len, int limit); //¼ÆËã½â
-static int getRestrictedResolvent(int x, int limit); //»ñµÃ½â
-static int subsumable(int j, int k); //ÅĞ¶Ï×Ó¾äÊÇ·ñ°üº¬ÓÚÁíÒ»¸ö×Ó¾ä
-static int preprocessSubsume(); //´¦Àí°üº¬×Ó¾ä
-static int preprocessUnitPropagation(); //Ô¤´¦Àíµ¥×Ó¾ä´«²¥
-static void preprocessMonotoneLiteralFixing(); //Ô¤´¦Àíµ¥µ÷±äÔª
-static int preprocessor(); //Ô¤´¦Àí
-static int clausePresent(int C[], int n); //¼ì²â×Ó¾äÊÇ·ñÖØ¸´
-static int addClause(int C[], int n); //½«×Ó¾ä±£´æµ½¹«Ê½ÖĞ
-static int reader(char* path); //¶ÁÈ¡ÎÄ¼ş
+static int compare(const void* a, const void* b); //æŒ‰å˜å…ƒç¼–å·æ¯”è¾ƒå¤§å°
+static int computeResolvent(int x, int a, int b, int& len, int limit); //è®¡ç®—è§£
+static int getRestrictedResolvent(int x, int limit); //è·å¾—è§£
+static int subsumable(int j, int k); //åˆ¤æ–­å­å¥æ˜¯å¦åŒ…å«äºå¦ä¸€ä¸ªå­å¥
+static int preprocessSubsume(); //å¤„ç†åŒ…å«å­å¥
+static int preprocessUnitPropagation(); //é¢„å¤„ç†å•å­å¥ä¼ æ’­
+static void preprocessMonotoneLiteralFixing(); //é¢„å¤„ç†å•è°ƒå˜å…ƒ
+static int preprocessor(); //é¢„å¤„ç†
+static int clausePresent(int C[], int n); //æ£€æµ‹å­å¥æ˜¯å¦é‡å¤
+static int addClause(int C[], int n); //å°†å­å¥ä¿å­˜åˆ°å…¬å¼ä¸­
+static int reader(char* path); //è¯»å–æ–‡ä»¶
 
-inline int getLiteralDLCS(); //°´±äÔª³öÏÖ´ÎÊıÑ¡Ôñ
+inline int getLiteralDLCS(); //æŒ‰å˜å…ƒå‡ºç°æ¬¡æ•°é€‰æ‹©
 inline int getShortestLen();
 static void getMOMS(int x, int k,unsigned int& s, unsigned int& t);
 inline int getLiteralMinLen();

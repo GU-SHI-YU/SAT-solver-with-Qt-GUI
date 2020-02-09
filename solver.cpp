@@ -1,4 +1,4 @@
-#include "define.h"
+ï»¿#include "define.h"
 #include "global_var.h"
 #include "branching_rule.h"
 #include "function.h"
@@ -20,8 +20,8 @@ void setVar(int v)
 		clauses[j].is_satisfied = YES;
 		r_clauses--;
 		changes[changes_index++].clause_index = j;
-		n_changes[depth][SATISFIED]++; //¼ÇÂ¼¸üĞÂ
-	} //Ê¹Ã¿¸ö°üº¬vµÄ×Ó¾ä±ê¼ÇÎªÂú×ã
+		n_changes[depth][SATISFIED]++; //è®°å½•æ›´æ–°
+	} //ä½¿æ¯ä¸ªåŒ…å«vçš„å­å¥æ ‡è®°ä¸ºæ»¡è¶³
 	q = !q;
 	for (i = 0; i < l_info[p][q].n_occur; i++) //
 	{
@@ -30,35 +30,35 @@ void setVar(int v)
 			continue;
 		int k = l_info[p][q].lit_in_clause_locs[i];
 		clauses[j].current_length--;
-		clauses[j].binary_code -= 1 << k; //¸üĞÂ±äÔªÂú×ãĞÔ
+		clauses[j].binary_code -= 1 << k; //æ›´æ–°å˜å…ƒæ»¡è¶³æ€§
 		changes[changes_index].clause_index = j;
 		changes[changes_index++].literal_index = k;
-		n_changes[depth][SHRUNK]++; //¼ÇÂ¼¸üĞÂ
+		n_changes[depth][SHRUNK]++; //è®°å½•æ›´æ–°
 		if (clauses[j].current_length == 1)
 		{
-			int loc = int(log2(clauses[j].binary_code)); //»ñÈ¡µ¥×Ó¾ä±äÔª
+			int loc = int(log2(clauses[j].binary_code)); //è·å–å•å­å¥å˜å…ƒ
 			int w = clauses[j].literals[loc];
 			int s = abs(w);
 			int t = (w > 0) ? SATISFIED : SHRUNK;
-			l_info[s][t].antecedent_clause = j; //¸üĞÂµ¥×Ó¾äÇ°Çı×Ó¾ä
+			l_info[s][t].antecedent_clause = j; //æ›´æ–°å•å­å¥å‰é©±å­å¥
 			if (l_info[s][(!t)].is_unit == YES)
 			{
 				contradictory_unit_clauses = TRUE;
-				conflicting_literals = w; //¼ÇÂ¼Ã¬¶Ü
-			} //Èç¹û·ÇwÒ²ÊÇµ¥×Ó¾ä±äÔª
+				conflicting_literals = w; //è®°å½•çŸ›ç›¾
+			} //å¦‚æœéwä¹Ÿæ˜¯å•å­å¥å˜å…ƒ
 			else if (l_info[s][t].is_unit == NO)
 			{
 				gucl_stack[n_gucl] = clauses[j].current_ucl = w;
 				l_info[s][t].is_unit = YES;
-				n_gucl++; //µ¥×Ó¾ä±äÔªÈëÕ»
+				n_gucl++; //å•å­å¥å˜å…ƒå…¥æ ˆ
 			}
-		} //Èç¹û×Ó¾ä±ä³Éµ¥×Ó¾ä
-	} //ÔÚÃ¿¸ö°üº¬·ÇvµÄ×Ó¾äÖĞÉ¾È¥·Çv
+		} //å¦‚æœå­å¥å˜æˆå•å­å¥
+	} //åœ¨æ¯ä¸ªåŒ…å«évçš„å­å¥ä¸­åˆ å»év
 	if (depth && backtrack_level == depth - 1)
 		backtrack_level++;
 	depth++;
 	l_info[p][SATISFIED].is_assigned = YES;
-	l_info[p][SHRUNK].is_assigned = YES; //¸üĞÂÉî¶ÈºÍ±äÔª¸³ÖµÇé¿ö
+	l_info[p][SHRUNK].is_assigned = YES; //æ›´æ–°æ·±åº¦å’Œå˜å…ƒèµ‹å€¼æƒ…å†µ
 }
 
 void unSetVar(int v)
@@ -66,7 +66,7 @@ void unSetVar(int v)
 	int p = abs(v);
 	depth--;
 	if (depth && backtrack_level == depth)
-		backtrack_level--; //¸üĞÂÉî¶È
+		backtrack_level--; //æ›´æ–°æ·±åº¦
 	while (n_changes[depth][SHRUNK])
 	{
 		n_changes[depth][SHRUNK]--;
@@ -79,26 +79,26 @@ void unSetVar(int v)
 			int t = (clauses[j].current_ucl > 0) ? SATISFIED : SHRUNK;
 			l_info[s][t].is_unit = NO;
 			clauses[j].current_ucl = 0;
-		} //Èç¹û»ØËİÖ®Ç°ÊÇµ¥×Ó¾ä
-		clauses[j].binary_code += (1 << k); //¸üĞÂ×Ó¾ä±äÔªÂú×ãĞÔ
-	} //»ØËİËùÓĞ·Çv±äÔª¸Ä±ä
+		} //å¦‚æœå›æº¯ä¹‹å‰æ˜¯å•å­å¥
+		clauses[j].binary_code += (1 << k); //æ›´æ–°å­å¥å˜å…ƒæ»¡è¶³æ€§
+	} //å›æº¯æ‰€æœ‰évå˜å…ƒæ”¹å˜
 	while (n_changes[depth][SATISFIED])
 	{
 		n_changes[depth][SATISFIED]--;
 		int j = changes[--changes_index].clause_index;
 		clauses[j].is_satisfied = NO;
 		r_clauses++;
-	} //»ØËİËùÓĞv±äÔª¸Ä±ä
+	} //å›æº¯æ‰€æœ‰vå˜å…ƒæ”¹å˜
 	l_info[p][SATISFIED].is_assigned = NO;
-	l_info[p][SHRUNK].is_assigned = NO; //¸üĞÂ±äÔª¸³Öµ×´Ì¬
+	l_info[p][SHRUNK].is_assigned = NO; //æ›´æ–°å˜å…ƒèµ‹å€¼çŠ¶æ€
 }
 
 int dpll()
 {
-	int* lucl_stack = nullptr; //´¢´æ¾Ö²¿µ¥×Ó¾ä±äÔª
-	unsigned int n_lucl = 0; //¾Ö²¿µ¥×Ó¾ä±äÔªÊıÁ¿
-	int* ml_stack = nullptr; //´¢´æµ¥µ÷±äÔª
-	int n_ml = 0; //µ¥µ÷±äÔªÊıÁ¿
+	int* lucl_stack = nullptr; //å‚¨å­˜å±€éƒ¨å•å­å¥å˜å…ƒ
+	unsigned int n_lucl = 0; //å±€éƒ¨å•å­å¥å˜å…ƒæ•°é‡
+	int* ml_stack = nullptr; //å‚¨å­˜å•è°ƒå˜å…ƒ
+	int n_ml = 0; //å•è°ƒå˜å…ƒæ•°é‡
 	while (true)
 	{
 		if (contradictory_unit_clauses)
@@ -116,12 +116,12 @@ int dpll()
 				impl_clauses[icl_cnt++] = l_info[s][t].antecedent_clause;
 				assign[s].type = UNASSINGED;
 				assign[s].decision = ASSIGN_NONE;
-			} //»¹Ô­Ç°Çı×Ó¾ä
+			} //è¿˜åŸå‰é©±å­å¥
 			contradictory_unit_clauses = FALSE;
 			free(lucl_stack);
 			n_gucl = 0;
 			return UNSATISFIABLE;
-		} //ÓĞÃ¬¶Ü×Ó¾ä
+		} //æœ‰çŸ›ç›¾å­å¥
 		if (n_gucl)
 		{
 			lucl_stack = (int*)realloc(lucl_stack, (n_lucl + 1) * sizeof(int));
@@ -134,10 +134,10 @@ int dpll()
 			assign[abs(implied_lit)].decision = ASSIGN_IMPLIED;
 			setVar(implied_lit);
 			n_units++;
-		} //Ã»ÓĞÃ¬¶Ü×Ó¾ä£¬Îªµ¥×Ó¾ä±äÔª¸³Öµ
+		} //æ²¡æœ‰çŸ›ç›¾å­å¥ï¼Œä¸ºå•å­å¥å˜å…ƒèµ‹å€¼
 		else
 			break;
-	} //µ¥×Ó¾ä´«²¥
+	} //å•å­å¥ä¼ æ’­
 	if (!r_clauses)
 		return SATISFIABLE;
 	int i;
@@ -173,10 +173,10 @@ int dpll()
 				assign[abs(u)].depth = depth;
 				assign[abs(u)].decision = ASSIGN_IMPLIED;
 				setVar(u);
-			} //µ¥×Ó¾ä±äÔª¸³Öµ
+			} //å•å­å¥å˜å…ƒèµ‹å€¼
 		}
-	} //µ¥µ÷±äÔªÓÅ»¯
-	int v = getLiteral2SJW();
+	} //å•è°ƒå˜å…ƒä¼˜åŒ–
+    int v = getLiteralMinLen();
 	//printf("%d ", v);
 	//for (i = 0;i < n_clauses;i++)
 	//	if (clauses[i].is_satisfied == NO)
@@ -184,7 +184,7 @@ int dpll()
 	assign[abs(v)].type = (v > 0) ? TRUE : FALSE;
 	assign[abs(v)].depth = depth;
 	assign[abs(v)].decision = ASSIGN_BRANCHED;
-	setVar(v); //°´ÕÕ·ÖÁÑ¹æÔòÎª±äÔª¸³Öµ
+	setVar(v); //æŒ‰ç…§åˆ†è£‚è§„åˆ™ä¸ºå˜å…ƒèµ‹å€¼
 	if (dpll())
 		return SATISFIABLE;
 	unSetVar(v);
@@ -203,7 +203,7 @@ int dpll()
 				if (assign[m].decision == ASSIGN_BRANCHED && assign[m].depth > max_depth)
 					max_depth = assign[m].depth;
 			}
-		} //¸üĞÂmax_depth
+		} //æ›´æ–°max_depth
 		left = TRUE;
 	}
 	n_backtracks++;
@@ -230,18 +230,18 @@ int dpll()
 					if (assign[m].decision == ASSIGN_BRANCHED && assign[m].depth > max_depth)
 						max_depth = assign[m].depth;
 				}
-			} //¸üĞÂmax_depth
+			} //æ›´æ–°max_depth
 			if (max_depth < backtrack_level)
-				backtrack_level = max_depth; //¸üĞÂ»ØËİÉî¶È
+				backtrack_level = max_depth; //æ›´æ–°å›æº¯æ·±åº¦
 		}
-	} //²»½¨Òé»ØËİ
+	} //ä¸å»ºè®®å›æº¯
 	while (n_ml)
 	{
 		int u = ml_stack[--n_ml];
 		unSetVar(u);
 		assign[abs(u)].type = UNASSINGED;
 		assign[abs(u)].decision = ASSIGN_NONE;
-	} //³·»Øµ¥µ÷±äÔª¸Ä¶¯
+	} //æ’¤å›å•è°ƒå˜å…ƒæ”¹åŠ¨
 	icl_cnt = 0;
 	while (n_lucl)
 	{
@@ -249,7 +249,7 @@ int dpll()
 		unSetVar(z);
 		assign[abs(z)].type = UNASSINGED;
 		assign[abs(z)].decision = ASSIGN_NONE;
-	} //³·»Ø¸ü¸Ä
+	} //æ’¤å›æ›´æ”¹
 	free(lucl_stack);
 	contradictory_unit_clauses = FALSE;
 	return UNSATISFIABLE;

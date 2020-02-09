@@ -16,10 +16,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    binary_puzzle.cpp \
     main.cpp \
-    satsolverqt.cpp
+    reader.cpp \
+    satsolverqt.cpp \
+    solver.cpp
 
 HEADERS += \
+    branching_rule.h \
+    define.h \
+    function.h \
+    global_var.h \
     satsolverqt.h
 
 FORMS += \

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -11,10 +11,10 @@
 #define FALSE 0
 #define TRUE 1
 #define UNASSINGED 2
-#define ASSIGN_NONE 0 //Î´±»¸³Öµ
-#define ASSIGN_BRANCHED 1 //»ùÓÚ·ÖÁÑ²ßÂÔ±»¸³Öµ
-#define ASSIGN_IMPLIED 2 //»ùÓÚµ¥×Ó¾ä±»¸³Öµ
-#define ASSIGN_REMOVED 3 //±»ºöÂÔµÄ±äÔª
+#define ASSIGN_NONE 0 //æœªè¢«èµ‹å€¼
+#define ASSIGN_BRANCHED 1 //åŸºäºåˆ†è£‚ç­–ç•¥è¢«èµ‹å€¼
+#define ASSIGN_IMPLIED 2 //åŸºäºå•å­å¥è¢«èµ‹å€¼
+#define ASSIGN_REMOVED 3 //è¢«å¿½ç•¥çš„å˜å…ƒ
 
 #define MAX_CLAUSES 10000
 #define MAX_VARS 1000

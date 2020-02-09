@@ -1,4 +1,4 @@
-#include "satsolverqt.h"
+﻿#include "satsolverqt.h"
 
 #include <QApplication>
 

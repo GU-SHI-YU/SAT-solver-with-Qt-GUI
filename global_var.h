@@ -1,76 +1,81 @@
-#pragma once
+ï»¿#pragma once
 
 #include "define.h"
 #include <stdio.h>
 
 typedef struct literal_info
 {
-	int is_assigned; //ÊÇ·ñ±»¸³Öµ
-	int n_occur; //ÔÚ×Ó¾äÖĞ³öÏÖ´ÎÊı
-	int* lit_in_clauses; //³öÏÖ¹ıµÄ×Ó¾ä
-	int* lit_in_clause_locs; //³öÏÖ¹ıµÄ×Ó¾äÖĞ±äÔªµÄÎ»ÖÃ
-	int is_unit; //ÊÇ·ñÎªµ¥×Ó¾ä
-	int antecedent_clause; //Ç°Çı×Ó¾ä
+	int is_assigned; //æ˜¯å¦è¢«èµ‹å€¼
+	int n_occur; //åœ¨å­å¥ä¸­å‡ºç°æ¬¡æ•°
+	int* lit_in_clauses; //å‡ºç°è¿‡çš„å­å¥
+	int* lit_in_clause_locs; //å‡ºç°è¿‡çš„å­å¥ä¸­å˜å…ƒçš„ä½ç½®
+	int is_unit; //æ˜¯å¦ä¸ºå•å­å¥
+	int antecedent_clause; //å‰é©±å­å¥
 }literal_info;
 
-static literal_info l_info[MAX_VARS + 5][2]; //´¢´æ±äÔª
+static literal_info l_info[MAX_VARS + 5][2]; //å‚¨å­˜å˜å…ƒ
 
 typedef struct clause_info
 {
-	int* literals; //°üº¬±äÔª
-	int current_length; //µ±Ç°³¤¶È
-	int original_length; //Ô­Ê¼³¤¶È
-	int is_satisfied; //ÊÇ·ñÂú×ã
-	int binary_code; //±äÔªÂú×ãĞÔ¶ş½øÖÆ±àÂë
-	int current_ucl; //µ±Ç°µ¥×Ö¾ä£¬²»ÊÇµ¥×Ö¾äÊ±Îª0
+	int* literals; //åŒ…å«å˜å…ƒ
+	int current_length; //å½“å‰é•¿åº¦
+	int original_length; //åŸå§‹é•¿åº¦
+	int is_satisfied; //æ˜¯å¦æ»¡è¶³
+	int binary_code; //å˜å…ƒæ»¡è¶³æ€§äºŒè¿›åˆ¶ç¼–ç 
+	int current_ucl; //å½“å‰å•å­—å¥ï¼Œä¸æ˜¯å•å­—å¥æ—¶ä¸º0
 }clause_info;
 
-static clause_info* clauses; //´¢´æ×Ó¾ä
-static int n_clauses; //Ô­Ê¼×Ó¾äÊıÁ¿
-static int r_clauses; //µ±Ç°×Ó¾äÊıÁ¿
+static clause_info* clauses; //å‚¨å­˜å­å¥
+static int n_clauses; //åŸå§‹å­å¥æ•°é‡
+static int r_clauses; //å½“å‰å­å¥æ•°é‡
 
 typedef struct changes_info
 {
-	int clause_index; //ÉÏ´Î±»¸ü¸ÄµÄ×Ó¾ä
-	int literal_index; //ÉÏ´Î±»¸ü¸ÄµÄ±äÔª
+	int clause_index; //ä¸Šæ¬¡è¢«æ›´æ”¹çš„å­å¥
+	int literal_index; //ä¸Šæ¬¡è¢«æ›´æ”¹çš„å˜å…ƒ
 }changes_info;
 
-static changes_info changes[50000000]; //´¢´æ¸ü¸Ä
-static unsigned int changes_index; //ÉÏ´Î¸ü¸ÄµÄË÷Òı
-static unsigned int n_changes[MAX_VARS + 5][2]; //Ä³Ò»Éî¶È±»Âú×ãºÍ±»Ïû³ıµÄ±äÔªÊı
+static changes_info changes[50000000]; //å‚¨å­˜æ›´æ”¹
+static unsigned int changes_index; //ä¸Šæ¬¡æ›´æ”¹çš„ç´¢å¼•
+static unsigned int n_changes[MAX_VARS + 5][2]; //æŸä¸€æ·±åº¦è¢«æ»¡è¶³å’Œè¢«æ¶ˆé™¤çš„å˜å…ƒæ•°
 
 typedef struct assign_info
 {
-	int type; //¸³ÖµÎªÕæ»ò¼Ù
-	int depth; //½øĞĞ¸³ÖµµÄÉî¶È
-	int decision; //±»¸³ÖµµÄÔ­Òò
+	int type; //èµ‹å€¼ä¸ºçœŸæˆ–å‡
+	int depth; //è¿›è¡Œèµ‹å€¼çš„æ·±åº¦
+	int decision; //è¢«èµ‹å€¼çš„åŸå› 
 }assign_info;
 
-static assign_info assign[MAX_VARS + 5]; //´¢´æ¸³Öµ
+static assign_info assign[MAX_VARS + 5]; //å‚¨å­˜èµ‹å€¼
 
-static int contradictory_unit_clauses; //ÊÇ·ñÓĞÃ¬¶Üµ¥×Ó¾ä
-static int conflicting_literals; //²úÉúÃ¬¶ÜµÄ±äÔª
+static int contradictory_unit_clauses; //æ˜¯å¦æœ‰çŸ›ç›¾å•å­å¥
+static int conflicting_literals; //äº§ç”ŸçŸ›ç›¾çš„å˜å…ƒ
 
-static int gucl_stack[MAX_VARS + 5]; //ÓÃÓÚµ¥×Ó¾ä´«²¥µÄÕ»
-static int n_gucl; //ÓÃÓÚµ¥×Ó¾ä´«²¥µÄÕ»µÄ´óĞ¡
+static int gucl_stack[MAX_VARS + 5]; //ç”¨äºå•å­å¥ä¼ æ’­çš„æ ˆ
+static int n_gucl; //ç”¨äºå•å­å¥ä¼ æ’­çš„æ ˆçš„å¤§å°
 
-static int depth; //DPLLÉî¶È
-static int backtrack_level; //»ØËİÉî¶È
+static int depth; //DPLLæ·±åº¦
+static int backtrack_level; //å›æº¯æ·±åº¦
 
-static int impl_clauses[MAX_CLAUSES + 5]; //´¢´æµ¥×Ó¾ä´«²¥·¢ÉúÃ¬¶ÜÊ±Ç°Çı×Ó¾ä
-static int icl_cnt; //µ¥×Ó¾ä´«²¥·¢ÉúÃ¬¶ÜÊ±Ç°Çı×Ó¾äÊı
+static int impl_clauses[MAX_CLAUSES + 5]; //å‚¨å­˜å•å­å¥ä¼ æ’­å‘ç”ŸçŸ›ç›¾æ—¶å‰é©±å­å¥
+static int icl_cnt; //å•å­å¥ä¼ æ’­å‘ç”ŸçŸ›ç›¾æ—¶å‰é©±å­å¥æ•°
 
-static int n_backtracks; //»ØËİ´ÎÊı
-static int n_units; //µ¥×Ó¾ä±äÔª¸³Öµ´ÎÊı
+static int n_backtracks; //å›æº¯æ¬¡æ•°
+static int n_units; //å•å­å¥å˜å…ƒèµ‹å€¼æ¬¡æ•°
 
-static int n_vars; //±äÔªÊı
+static int n_vars; //å˜å…ƒæ•°
 
-static int resolvent[MAX_VARS + 5]; //ÇóµÃµÄ½â
+static int resolvent[MAX_VARS + 5]; //æ±‚å¾—çš„è§£
 
 static int changes_occured;
-static int resolvents_added; //±»¼ÓÈëµÄ½â
-static int n_resolvents_threshold; //¿ÉÒÔ±»¼ÓÈëµÄ½âÉÏÏŞ
+static int resolvents_added; //è¢«åŠ å…¥çš„è§£
+static int n_resolvents_threshold; //å¯ä»¥è¢«åŠ å…¥çš„è§£ä¸Šé™
 
-static int max_clause_len; //×î´ó×Ó¾ä³¤¶È£¬ÓÃÓÚ·ÖÁÑ
+static int max_clause_len; //æœ€å¤§å­å¥é•¿åº¦ï¼Œç”¨äºåˆ†è£‚
 
 static FILE* fout;
+
+static int ans[8][8];
+static int editable[8][8];
+
+static int puzzle_size;

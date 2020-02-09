@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "define.h"
 #include "global_var.h"
 #include "function.h"

@@ -1,4 +1,4 @@
-#include "define.h"
+ï»¿#include "define.h"
 #include  "global_var.h"
 #include "function.h"
 #include "solver.cpp"
@@ -46,10 +46,10 @@ int computeResolvent(int x, int a, int b, int& len, int limit)
 				{
 					free(check);
 					return FALSE;
-				} //Èç¹û½â³¬¹ı´óĞ¡£¬·ÅÆúÇó½â
-			} //¼ÇÂ¼²»ÊÇxÒ²Ã»¼ÇÂ¼¹ıµÄ±äÔª
+				} //å¦‚æœè§£è¶…è¿‡å¤§å°ï¼Œæ”¾å¼ƒæ±‚è§£
+			} //è®°å½•ä¸æ˜¯xä¹Ÿæ²¡è®°å½•è¿‡çš„å˜å…ƒ
 		}
-	} //ÔÚÁ½¸ö×Ó¾äÖĞ¼ìË÷
+	} //åœ¨ä¸¤ä¸ªå­å¥ä¸­æ£€ç´¢
 	len = res_size;
 	free(check);
 	return TRUE;
@@ -77,14 +77,14 @@ int getRestrictedResolvent(int x, int limit)
 						{
 							resolvents_added += addClause(resolvent, res_length);
 							changes_occured = TRUE;
-						} //½âµÄÊıÁ¿Î´´ïµ½ÉÏÏŞ
+						} //è§£çš„æ•°é‡æœªè¾¾åˆ°ä¸Šé™
 						else
 							return 0;
-					} //ÕÒµ½½â
+					} //æ‰¾åˆ°è§£
 				}
 			}
 		}
-	} //Çó»¯¼òÕâ¸ö±äÔª¿ÉÒÔ»ñµÃµÄ½â
+	} //æ±‚åŒ–ç®€è¿™ä¸ªå˜å…ƒå¯ä»¥è·å¾—çš„è§£
 	return -1;
 }
 
@@ -139,14 +139,14 @@ int preprocessSubsume()
 				}
 			}
 		}
-	} //¼ì²é°üº¬
+	} //æ£€æŸ¥åŒ…å«
 	return n_subsumed;
 }
 
 int preprocessUnitPropagation()
 {
-	int* lucl_stack = nullptr; //´¢´æ¾Ö²¿µ¥×Ó¾ä±äÔª
-	unsigned int n_lucl = 0; //¾Ö²¿µ¥×Ó¾ä±äÔªÊıÁ¿
+	int* lucl_stack = nullptr; //å‚¨å­˜å±€éƒ¨å•å­å¥å˜å…ƒ
+	unsigned int n_lucl = 0; //å±€éƒ¨å•å­å¥å˜å…ƒæ•°é‡
 	changes_occured = FALSE;
 	while (true)
 	{
@@ -162,12 +162,12 @@ int preprocessUnitPropagation()
 				int t = (lucl_stack[n_lucl] > 0) ? SATISFIED : SHRUNK;
 				assign[s].type = UNASSINGED;
 				assign[s].decision = ASSIGN_NONE;
-			} //»¹Ô­Ç°Çı×Ó¾ä
+			} //è¿˜åŸå‰é©±å­å¥
 			contradictory_unit_clauses = FALSE;
 			free(lucl_stack);
 			n_gucl = 0;
 			return UNSATISFIABLE;
-		} //ÓĞÃ¬¶Ü×Ó¾ä
+		} //æœ‰çŸ›ç›¾å­å¥
 		if (n_gucl)
 		{
 			lucl_stack = (int*)realloc(lucl_stack, (n_lucl + 1) * sizeof(int));
@@ -181,10 +181,10 @@ int preprocessUnitPropagation()
 			setVar(implied_lit);
 			n_units++;
 			changes_occured = TRUE;
-		} //Ã»ÓĞÃ¬¶Ü×Ó¾ä£¬Îªµ¥×Ó¾ä±äÔª¸³Öµ
+		} //æ²¡æœ‰çŸ›ç›¾å­å¥ï¼Œä¸ºå•å­å¥å˜å…ƒèµ‹å€¼
 		else
 			break;
-	} //µ¥×Ó¾ä´«²¥
+	} //å•å­å¥ä¼ æ’­
 	return SATISFIABLE;
 }
 
@@ -220,9 +220,9 @@ void preprocessMonotoneLiteralFixing()
 				assign[abs(u)].depth = depth;
 				assign[abs(u)].decision = ASSIGN_IMPLIED;
 				setVar(u);
-			} //µ¥×Ó¾ä±äÔª¸³Öµ
+			} //å•å­å¥å˜å…ƒèµ‹å€¼
 		}
-	} //µ¥µ÷±äÔªÓÅ»¯
+	} //å•è°ƒå˜å…ƒä¼˜åŒ–
 }
 
 int preprocessor()
@@ -239,10 +239,10 @@ int preprocessor()
 	while (true)
 	{
 		total_changes_occured = 0;
-		if (preprocessUnitPropagation() == UNSATISFIABLE) //Ô¤´¦Àíµ¥×Ó¾ä´«²¥
+		if (preprocessUnitPropagation() == UNSATISFIABLE) //é¢„å¤„ç†å•å­å¥ä¼ æ’­
 			return UNSATISFIABLE;
 		total_changes_occured += changes_occured;
-		preprocessMonotoneLiteralFixing(); //Ô¤´¦Àíµ¥µ÷±äÔª¼ò»¯
+		preprocessMonotoneLiteralFixing(); //é¢„å¤„ç†å•è°ƒå˜å…ƒç®€åŒ–
 		total_changes_occured += changes_occured;
 		//if(resolvents_added < n_resolvents_threshold)
 		//{
@@ -255,8 +255,8 @@ int preprocessor()
 		//				break;
 		//			}
 		//	total_changes_occured += changes_occured;
-		//} //Ô¤´¦ÀíÇó½â
-		preprocessSubsume(); //Ô¤´¦Àí°üº¬×Ó¾ä¼ò»¯
+		//} //é¢„å¤„ç†æ±‚è§£
+		preprocessSubsume(); //é¢„å¤„ç†åŒ…å«å­å¥ç®€åŒ–
 		total_changes_occured += changes_occured;
 		if (total_changes_occured == 0)
 			break;
@@ -292,7 +292,7 @@ int addClause(int C[], int n)
 	int i;
 	qsort(C, n, sizeof(int),compare);
 	if (clausePresent(C, n))
-		return FALSE; //¼ì²éÊÇ·ñÊÇÖØ¸´×Ó¾ä
+		return FALSE; //æ£€æŸ¥æ˜¯å¦æ˜¯é‡å¤å­å¥
 	clauses = (clause_info*)realloc(clauses, (n_clauses + 1) * sizeof(clause_info));
 	if (!clauses)
 		exit(-1);
@@ -301,7 +301,7 @@ int addClause(int C[], int n)
 	clauses[n_clauses].original_length = n;
 	clauses[n_clauses].binary_code = (((1 << (n - 1)) - 1) << 1) + 1;
 	clauses[n_clauses].current_ucl = 0;
-	clauses[n_clauses].literals = (int*)malloc((n + 1) * sizeof(int)); //×Ó¾ä³õÊ¼»¯
+	clauses[n_clauses].literals = (int*)malloc((n + 1) * sizeof(int)); //å­å¥åˆå§‹åŒ–
 	if (n > max_clause_len)
 		max_clause_len = n;
 	for(i = 0;i < n;i++)
@@ -322,7 +322,7 @@ int addClause(int C[], int n)
 		//fprintf(fout, "%d ", C[i]);
 		assign[p].decision = ASSIGN_NONE;
 		assign[p].type = UNASSINGED;
-	} //×Ó¾ä¸³Öµ
+	} //å­å¥èµ‹å€¼
 	//fprintf(fout, "0\n");
 	if(n == 1)
 	{
@@ -339,9 +339,9 @@ int addClause(int C[], int n)
 			gucl_stack[n_gucl] = clauses[n_clauses].literals[0];
 			clauses[n_clauses].current_ucl = clauses[n_clauses].literals[0];
 			l_info[s][t].is_unit = YES;
-			n_gucl++; //µ¥×Ó¾ä±äÔªÈëÕ»
+			n_gucl++; //å•å­å¥å˜å…ƒå…¥æ ˆ
 		}
-	} //ÊÇµ¥×Ó¾ä
+	} //æ˜¯å•å­å¥
 	n_clauses++;
 	r_clauses++;
 	return TRUE;
@@ -350,8 +350,8 @@ int addClause(int C[], int n)
 int reader(char* path)
 {
 	init();
-	int* literals = nullptr; //×Ó¾ä±äÔª
-	int res_size = 0; //×Ó¾ä±äÔªÊı
+	int* literals = nullptr; //å­å¥å˜å…ƒ
+	int res_size = 0; //å­å¥å˜å…ƒæ•°
 	FILE* fp = fopen(path, "r");
 	int n_c;
 	char bin[80];
@@ -363,11 +363,11 @@ int reader(char* path)
 		if(c == 'c')
 		{
 			fgets(bin, 80, fp);
-		}//Ìø¹ı×¢ÊÍ
+		}//è·³è¿‡æ³¨é‡Š
 		else if(c == 'p')
 		{
 			fscanf(fp,"%s", bin);
-			fscanf(fp,"%d%d", &n_vars, &n_c); //»ñÈ¡×Ó¾äÊı£¬±äÔªÊı
+			fscanf(fp,"%d%d", &n_vars, &n_c); //è·å–å­å¥æ•°ï¼Œå˜å…ƒæ•°
 			fgetc(fp);
 		}
 		else
@@ -382,7 +382,7 @@ int reader(char* path)
 					exit(-1);
 				literals[res_size++] = i;
 				fscanf(fp,"%d", &i);
-			} //¶ÁÈ¡×Ó¾ä±äÔª
+			} //è¯»å–å­å¥å˜å…ƒ
 			if (res_size >= 32)
 			{
 				int j;
@@ -394,7 +394,7 @@ int reader(char* path)
 				n_vars++;
 				temp[30] = n_vars;
 				addClause(temp, 31);
-				res_size -= 30; //¹ı³¤×Ó¾äÍ·²¿´¦Àí
+				res_size -= 30; //è¿‡é•¿å­å¥å¤´éƒ¨å¤„ç†
 				while (res_size > 30)
 				{
 					temp[0] = n_vars;
@@ -407,15 +407,15 @@ int reader(char* path)
 					temp[30] = n_vars;
 					addClause(temp, 31);
 					res_size -= 29;
-				} //¹ı³¤×Ó¾äÖĞ¼ä²¿·Ö´¦Àí
+				} //è¿‡é•¿å­å¥ä¸­é—´éƒ¨åˆ†å¤„ç†
 				temp[0] = n_vars;
 				int k;
 				for (k = 1;k <= res_size;k++)
 				{
 					temp[k] = literals[j++];
 				}
-				addClause(temp, res_size + 1); //¹ı³¤×Ó¾äÎ²²¿´¦Àí
-			} //´¦Àí¹ı³¤×Ó¾ä
+				addClause(temp, res_size + 1); //è¿‡é•¿å­å¥å°¾éƒ¨å¤„ç†
+			} //å¤„ç†è¿‡é•¿å­å¥
 			else
 				addClause(literals, res_size);
 			literals = nullptr;

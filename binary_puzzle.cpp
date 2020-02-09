@@ -1,4 +1,4 @@
-#include "function.h"
+ï»¿#include "function.h"
 #include "define.h"
 #include "global_var.h"
 #include "reader.cpp"
@@ -7,12 +7,13 @@
 int readPuzzle(char* path)
 {
 	init();
-	int* literal = nullptr; //×Ó¾ä±äÔª
-	int res_size = 0; //×Ó¾ä±äÔªÊı
-	int m; //Êı¶À½×Êı
-	int n; //ÒÑÖª¿ÕÊı
+	int* literal = nullptr; //å­å¥å˜å…ƒ
+	int res_size = 0; //å­å¥å˜å…ƒæ•°
+	int m; //æ•°ç‹¬é˜¶æ•°
+	int n; //å·²çŸ¥ç©ºæ•°
 	FILE* fp = fopen(path, "r");
 	fscanf(fp, "%d%d", &m, &n);
+    puzzle_size = m;
 	n_vars = m * m;
 	literal = (int*)malloc(sizeof(int));
 	if (!literal)
@@ -37,7 +38,7 @@ int readPuzzle(char* path)
 				addClause(literal, 1);
 			}
 		}
-	} //¶ÁÈ¡ÒÑÖª¸ñ×Ó
+	} //è¯»å–å·²çŸ¥æ ¼å­
 	res_size = 3;
 	for (i = 0;i < m;i++)
 	{
@@ -56,7 +57,7 @@ int readPuzzle(char* path)
 			addClause(literal, res_size);
 			literal = nullptr;
 		}
-	} //ºáÏòÈı¸ö
+	} //æ¨ªå‘ä¸‰ä¸ª
 	for (i = 1;i < m - 1;i++)
 	{
 		for (j = 0;j < m;j++)
@@ -74,7 +75,7 @@ int readPuzzle(char* path)
 			addClause(literal, res_size);
 			literal = nullptr;
 		}
-	} //×İÏòÈı¸ö
+	} //çºµå‘ä¸‰ä¸ª
 	res_size = m / 2 + 1;
 	literal = (int*)malloc(sizeof(int) * res_size);
 	if (!literal)
@@ -83,7 +84,7 @@ int readPuzzle(char* path)
 	{
 		combine(literal, i, m, res_size, 0, 1);
 		combine(literal, i, m, res_size, 0, 2);
-	} //Ã¿ĞĞÃ¿ÁĞ0ºÍ1¸öÊıÏàÍ¬
+	} //æ¯è¡Œæ¯åˆ—0å’Œ1ä¸ªæ•°ç›¸åŒ
 	int* new_vars = (int*)malloc(sizeof(int) * (3 * m + 1));
 	if (!new_vars)
 		exit(-1);
@@ -141,7 +142,7 @@ int readPuzzle(char* path)
 			literal[0] = new_vars[0];
 			addClause(literal, 1);
 		}
-	} //²»ÄÜÓĞÏàÍ¬µÄĞĞ
+	} //ä¸èƒ½æœ‰ç›¸åŒçš„è¡Œ
 	for (j = 0;j < m;j++)
 	{
 		for (i = j + 1;i < m;i++)
@@ -196,7 +197,7 @@ int readPuzzle(char* path)
 			literal[0] = new_vars[0];
 			addClause(literal, 1);
 		}
-	} //²»ÄÜÓĞÏàÍ¬µÄÁĞ
+	} //ä¸èƒ½æœ‰ç›¸åŒçš„åˆ—
 	free(literal);
 	fclose(fp);
 	if (!preprocessor())
@@ -237,73 +238,87 @@ void combine(int* res, int i, int n, int k, int size, int type)
 
 int lasVegas(int n, int m)
 {
-	int k = n;
-	int** board = (int**)malloc(m *  sizeof(int*));
-	if (!board)
-		exit(-1);
-	for(int i = 0;i < m;i++)
-	{
-		board[i] = (int*)malloc(sizeof(int) * m);
-		if (!board[i])
-			exit(-1);
-	}
-	for (int i = 0;i < m;i++)
-		for (int j = 0;j < m;j++)
-			board[i][j] = '*';
-	srand((unsigned)time(NULL));
-	while(n)
-	{
-		int i = rand() % m;
-		int j = rand() % m;
-		if(board[i][j] == '*')
-		{
-			int v = rand() % 2 + 48;
-			if (i == 0)
-				if (board[i + 1][j] == v && board[i + 2][j] == v)
-					break;
-			if (i == m - 1)
-				if (board[i - 1][j] == v && board[i - 2][j] == v)
-					break;
-			if (i == 1)
-				if (board[i - 1][j] == v && board[i + 1][j] == v || board[i + 1][j] == v && board[i + 2][j] == v)
-					break;
-			if (i == m - 2)
-				if (board[i - 1][j] == v && board[i + 1][j] == v || board[i - 1][j] == v && board[i - 2][j] == v)
-					break;
+    int k = n;
+    int** board = (int**)malloc(m *  sizeof(int*));
+    if (!board)
+        exit(-1);
+    for(int i = 0;i < m;i++)
+    {
+        board[i] = (int*)malloc(sizeof(int) * m);
+        if (!board[i])
+            exit(-1);
+    }
+    for (int i = 0;i < m;i++)
+        for (int j = 0;j < m;j++)
+            board[i][j] = '*';
+    srand((unsigned)time(NULL));
+    while(n)
+    {
+        int i = rand() % m;
+        int j = rand() % m;
+        if(board[i][j] == '*')
+        {
+            int v = rand() % 2 + 48;
+            if (i == 0)
+                if (board[i + 1][j] == v && board[i + 2][j] == v)
+                    break;
+            if (i == m - 1)
+                if (board[i - 1][j] == v && board[i - 2][j] == v)
+                    break;
+            if (i == 1)
+                if (board[i - 1][j] == v && board[i + 1][j] == v || board[i + 1][j] == v && board[i + 2][j] == v)
+                    break;
+            if (i == m - 2)
+                if (board[i - 1][j] == v && board[i + 1][j] == v || board[i - 1][j] == v && board[i - 2][j] == v)
+                    break;
 			
-			if (j == 0)
-				if (board[i][j + 1] == v && board[i][j + 2] == v)
-					break;
-			if (j == m - 1)
-				if (board[i][j - 1] == v && board[i][j - 2] == v)
-					break;
-			if (j == 1)
-				if (board[i][j - 1] == v && board[i][j + 1] == v || board[i][j + 1] == v && board[i][j + 2] == v)
-					break;
-			if (j == m - 2)
-				if (board[i][j - 1] == v && board[i][j + 1] == v || board[i][j - 1] == v && board[i][j - 2] == v)
-					break;
-			if (i > 1 && i < m - 2 && j > 1 && j < m - 2)
-				if (board[i - 1][j] == v && board[i + 1][j] == v || board[i + 1][j] == v && board[i + 2][j] == v || board[i - 1][j] == v && board[i - 2][j] == v || board[i][j - 1] == v && board[i][j + 1] == v || board[i][j + 1] == v && board[i][j + 2] == v || board[i][j - 1] == v && board[i][j - 2] == v)
-					break;
-			board[i][j] = v;
-			n--;
-		}
-	}
-	FILE* temp = fopen("D:\\temp.out", "w");
-	char path[20] = "D:\\temp.out";
-	fprintf(temp, "%d %d\n", m, k);
-	for (int i = 0;i < m;i++)
-	{
-		for (int j = 0;j < m;j++)
-			fprintf(temp, "%c", board[i][j]);
-		fprintf(temp,"\n");
-	}
-	fclose(temp);
+            if (j == 0)
+                if (board[i][j + 1] == v && board[i][j + 2] == v)
+                    break;
+            if (j == m - 1)
+                if (board[i][j - 1] == v && board[i][j - 2] == v)
+                    break;
+            if (j == 1)
+                if (board[i][j - 1] == v && board[i][j + 1] == v || board[i][j + 1] == v && board[i][j + 2] == v)
+                    break;
+            if (j == m - 2)
+                if (board[i][j - 1] == v && board[i][j + 1] == v || board[i][j - 1] == v && board[i][j - 2] == v)
+                    break;
+            if (i > 1 && i < m - 2 && j > 1 && j < m - 2)
+                if (board[i - 1][j] == v && board[i + 1][j] == v || board[i + 1][j] == v && board[i + 2][j] == v || board[i - 1][j] == v && board[i - 2][j] == v || board[i][j - 1] == v && board[i][j + 1] == v || board[i][j + 1] == v && board[i][j + 2] == v || board[i][j - 1] == v && board[i][j - 2] == v)
+                    break;
+            board[i][j] = v;
+            n--;
+        }
+    }
+    FILE* temp = fopen(".\\prototype.sud", "w");
+    char path[20] = ".\\prototype.sud";
+    fprintf(temp, "%d %d\n", m, k);
+    for (int i = 0;i < m;i++)
+    {
+        for (int j = 0;j < m;j++)
+            fprintf(temp, "%c", board[i][j]);
+        fprintf(temp,"\n");
+    }
+    fclose(temp);
 	if(!readPuzzle(path))
 		return NO;
 	if (dpll())
+    {
+        FILE* fans = fopen(".\\ans.sud","w");
+        fprintf(fans,"%d %d\n",m,m*m);
+        for(int i = 1;i <= m*m;i++)
+        {
+            if(assign[i].type == TRUE)
+                fprintf(fans,"%c",'1');
+            else
+                fprintf(fans,"%c",'0');
+            if(i % m == 0)
+                fprintf(fans,"\n");
+        }
+        fclose(fans);
 		return YES;
+    }
 	return NO;
 }
 
@@ -344,15 +359,16 @@ int puzzleGen(int difficulty,int m)
 	{
 		int i = rand() % m;
 		int j = rand() % m;
-		if (board[i][j] == '*')
-			continue;;
-		if (k < 7)
+        if (marked[i][j] == 1)
+            continue;
+        marked[i][j] = 1;
+        if (k < m * m * 0.4)
 			break;
 		if (board[i][j] == '1')
 		{
 			board[i][j] = '0';
-			FILE* temp = fopen("D:\\temp.out", "w");
-			char path[20] = "D:\\temp.out";
+            FILE* temp = fopen(".\\question.sud", "w");
+            char path[80] = ".\\question.sud";
 			fprintf(temp, "%d %d\n", m, k - 1);
 			for (int i = 0;i < m;i++)
 			{
@@ -364,7 +380,7 @@ int puzzleGen(int difficulty,int m)
 			if (!readPuzzle(path) || !dpll())
 			{
 				board[i][j] = '*';
-				FILE* temp = fopen("D:\\temp.out", "w");
+                FILE* temp = fopen(".\\question.sud", "w");
 				fprintf(temp, "%d %d\n", m, k - 1);
 				for (int i = 0;i < m;i++)
 				{
@@ -381,8 +397,8 @@ int puzzleGen(int difficulty,int m)
 		else if (board[i][j] == '0')
 		{
 			board[i][j] = '1';
-			FILE* temp = fopen("D:\\temp.out", "w");
-			char path[20] = "D:\\temp.out";
+            FILE* temp = fopen(".\\question.sud", "w");
+            char path[20] = ".\\question.sud";
 			fprintf(temp, "%d %d\n", m, k - 1);
 			for (int i = 0;i < m;i++)
 			{
@@ -394,7 +410,7 @@ int puzzleGen(int difficulty,int m)
 			if (!readPuzzle(path) || !dpll())
 			{
 				board[i][j] = '*';
-				FILE* temp = fopen("D:\\temp.out", "w");
+                FILE* temp = fopen(".\\question.sud", "w");
 				fprintf(temp, "%d %d\n", m, k - 1);
 				for (int i = 0;i < m;i++)
 				{
