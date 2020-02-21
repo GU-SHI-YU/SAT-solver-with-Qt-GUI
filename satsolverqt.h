@@ -6,6 +6,8 @@
 #include <QStandardItem>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QTextCodec>
+#include <time.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SATSolverQt; }

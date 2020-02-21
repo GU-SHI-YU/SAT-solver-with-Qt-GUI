@@ -319,11 +319,11 @@ int addClause(int C[], int n)
 		l_info[p][q].n_occur++;
 		l_info[p][q].is_assigned = NO;
 		clauses[n_clauses].literals[i] = C[i];
-		//fprintf(fout, "%d ", C[i]);
+		fprintf(fout, "%d ", C[i]);
 		assign[p].decision = ASSIGN_NONE;
 		assign[p].type = UNASSINGED;
 	} //子句赋值
-	//fprintf(fout, "0\n");
+	fprintf(fout, "0\n");
 	if(n == 1)
 	{
 		int s = abs(clauses[n_clauses].literals[0]);
@@ -430,6 +430,8 @@ int reader(char* path)
 		fclose(fout);
 		return UNSATISFIABLE;
 	}
+    fseek(fout, 0, SEEK_SET);
+	fprintf(fout, "p cnf %d %d\n", n_vars, n_clauses);
 	fclose(fout);
 	return 1;
 }

@@ -119,6 +119,7 @@ void SATSolverQt::on_data_changed(QModelIndex, QModelIndex, QVector<int>)
 
 void SATSolverQt::on_getAns_clicked()
 {
+    branching_mode = 2;
     int m = puzzle_size;
     QStandardItemModel *itemModel;
     ui->boardTable->clearSpans();
@@ -149,9 +150,12 @@ void SATSolverQt::on_getAns_clicked()
 
 void SATSolverQt::on_getPuzzle_clicked()
 {
+    branching_mode = 2;
     QString str = QFileDialog::getOpenFileName(this,tr("打开文件"),tr("D:/"),tr("数独文件 (*.sud)"));
-    QByteArray ba = str.toLatin1();
-    char* path = ba.data();
+    QTextCodec *code = QTextCodec::codecForName("GB2312");
+    std::string name = code->fromUnicode(str).data();
+    char path[80];
+    strcpy(path,name.c_str());
     if(!readPuzzle(path))
         QMessageBox::information(this,QString("错误！"),QString("无解！"));
     int m = puzzle_size;
@@ -221,9 +225,10 @@ void SATSolverQt::on_getSAT_clicked()
 {
     ui->showAns->clear();
     ui->showSAT->clear();
-    QString str = QFileDialog::getOpenFileName(this,tr("打开文件"),tr("D:/"),tr("CNF文件(*.cnf)"));
-    QByteArray ba = str.toLatin1();
-    strcpy(cnfPath,ba.data());
+    QString str = QFileDialog::getOpenFileName(this,tr("打开文件"),tr("D:/Study/数据结构/程序设计综合课程设计任务及指导学生包/SAT测试备选算例"),tr("CNF文件(*.cnf)"));
+    QTextCodec *code = QTextCodec::codecForName("GB2312");
+    std::string name = code->fromUnicode(str).data();
+    strcpy(cnfPath,name.c_str());
     QFile file(str);
     file.open(QIODevice::ReadOnly);
     ui->showSAT->setPlainText(file.readAll());
@@ -232,13 +237,20 @@ void SATSolverQt::on_getSAT_clicked()
 
 void SATSolverQt::on_solveSAT_clicked()
 {
+    ui->showAns->clear();
+    branching_mode = ui->chooseBranching->currentIndex();
+    clock_t begin = clock();
     if(!reader(cnfPath))
     {
-        QMessageBox::information(this,QString("错误！"),QString("无法满足！"));
+        clock_t end = clock();
+        ui->showAns->appendPlainText("所用时间："+QString::number(end-begin)+"ms");
+        ui->showAns->appendPlainText("无法满足！");
         return;
     }
     if(dpll())
     {
+        clock_t end = clock();
+        ui->showAns->appendPlainText("所用时间："+QString::number(end-begin)+"ms");
         for(int i = 1;i <= n_vars;i++)
         {
             if(assign[i].type == TRUE)
@@ -248,5 +260,9 @@ void SATSolverQt::on_solveSAT_clicked()
         }
     }
     else
-        QMessageBox::information(this,QString("错误！"),QString("无法满足！"));
+    {
+        clock_t end = clock();
+        ui->showAns->appendPlainText("所用时间："+QString::number(end-begin)+"ms");
+        ui->showAns->appendPlainText("无法满足！");
+    }
 }

@@ -22,7 +22,7 @@ typedef struct clause_info
 	int original_length; //原始长度
 	int is_satisfied; //是否满足
 	int binary_code; //变元满足性二进制编码
-	int current_ucl; //当前单字句，不是单字句时为0
+	int current_ucl; //当前单子句，不是单子句时为0
 }clause_info;
 
 static clause_info* clauses; //储存子句
@@ -31,8 +31,8 @@ static int r_clauses; //当前子句数量
 
 typedef struct changes_info
 {
-	int clause_index; //上次被更改的子句
-	int literal_index; //上次被更改的变元
+	int clause_index; //被更改的子句
+	int literal_index; //被更改的变元
 }changes_info;
 
 static changes_info changes[50000000]; //储存更改
@@ -73,9 +73,11 @@ static int n_resolvents_threshold; //可以被加入的解上限
 
 static int max_clause_len; //最大子句长度，用于分裂
 
-static FILE* fout;
+static FILE* fout; //解析后的CNF文件
 
-static int ans[8][8];
-static int editable[8][8];
+static int ans[8][8]; //数独结果
+static int editable[8][8]; //鸽子是否可以编辑
 
-static int puzzle_size;
+static int puzzle_size; //数独大小
+
+static int branching_mode; //分支策略

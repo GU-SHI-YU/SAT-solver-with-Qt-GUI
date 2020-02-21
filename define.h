@@ -16,5 +16,5 @@
 #define ASSIGN_IMPLIED 2 //基于单子句被赋值
 #define ASSIGN_REMOVED 3 //被忽略的变元
 
-#define MAX_CLAUSES 10000
-#define MAX_VARS 1000
+#define MAX_CLAUSES 10000 //最大子句数
+#define MAX_VARS 1000 //最大变元数

@@ -17,13 +17,13 @@ static int addClause(int C[], int n); //将子句保存到公式中
 static int reader(char* path); //读取文件
 
 inline int getLiteralDLCS(); //按变元出现次数选择
-inline int getShortestLen();
-static void getMOMS(int x, int k,unsigned int& s, unsigned int& t);
-inline int getLiteralMinLen();
-inline int getLiteral2SJW();
-inline int getFirst();
+inline int getShortestLen(); //获得最短子句长
+static void getMOMS(int x, int k,unsigned int& s, unsigned int& t); //获得MOMS权值
+inline int getLiteralMinLen(); //按最短子句选择
+inline int getLiteral2SJW(); //按2-Sided-J-W规则选择
+inline int getFirst(); //选择第一个未赋值的变元
 
-static int readPuzzle(char* path);
-static void combine(int* res, int i, int n, int k, int size, int type);
-static int lasVegas(int n,int m);
-static int puzzleGen(int difficulty,int m);
+static int readPuzzle(char* path); //读取数独
+static void combine(int* res, int i, int n, int k, int size, int type); //求组合数
+static int lasVegas(int n,int m); //随机生成数独种子
+static int puzzleGen(int difficulty,int m); //生成唯一解数独

@@ -94,6 +94,36 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QComboBox" name="chooseBranching">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>getFirst</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>getLiteralDLCS</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>getLiteralMinLen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>getLiteral2SJW</string>
+             </property>
+            </item>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>

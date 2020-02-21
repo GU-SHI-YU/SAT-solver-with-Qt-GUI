@@ -205,6 +205,8 @@ int readPuzzle(char* path)
 		fclose(fout);
 		return UNSATISFIABLE;
 	}
+	fseek(fout, 0, SEEK_SET);
+	fprintf(fout,"p cnf %d %d\n", n_vars, n_clauses);
 	fclose(fout);
 	return 1;
 }
@@ -287,9 +289,9 @@ int lasVegas(int n, int m)
             if (i > 1 && i < m - 2 && j > 1 && j < m - 2)
                 if (board[i - 1][j] == v && board[i + 1][j] == v || board[i + 1][j] == v && board[i + 2][j] == v || board[i - 1][j] == v && board[i - 2][j] == v || board[i][j - 1] == v && board[i][j + 1] == v || board[i][j + 1] == v && board[i][j + 2] == v || board[i][j - 1] == v && board[i][j - 2] == v)
                     break;
-            board[i][j] = v;
+            board[i][j] = v; //不违反规则时填入一个随机数
             n--;
-        }
+        } //格子为空
     }
     FILE* temp = fopen(".\\prototype.sud", "w");
     char path[20] = ".\\prototype.sud";
@@ -299,7 +301,7 @@ int lasVegas(int n, int m)
         for (int j = 0;j < m;j++)
             fprintf(temp, "%c", board[i][j]);
         fprintf(temp,"\n");
-    }
+    } //记录数独种子
     fclose(temp);
 	if(!readPuzzle(path))
 		return NO;
@@ -318,14 +320,14 @@ int lasVegas(int n, int m)
         }
         fclose(fans);
 		return YES;
-    }
+    } //查看种子是否能得到一个解
 	return NO;
 }
 
 int puzzleGen(int difficulty,int m)
 {
 	int k = m * m;
-	while (lasVegas(5,m) != YES);
+	while (lasVegas(5,m) != YES); //得到一个有解的数独种子
 	int** board = (int**)malloc(sizeof(int*) * m);
 	if (!board)
 		exit(-1);
@@ -361,9 +363,9 @@ int puzzleGen(int difficulty,int m)
 		int j = rand() % m;
         if (marked[i][j] == 1)
             continue;
-        marked[i][j] = 1;
+        marked[i][j] = 1; //随机选择一个没尝试过的格子
         if (k < m * m * 0.4)
-			break;
+			break; //给定一个空数上限
 		if (board[i][j] == '1')
 		{
 			board[i][j] = '0';
@@ -375,7 +377,7 @@ int puzzleGen(int difficulty,int m)
 				for (int j = 0;j < m;j++)
 					fprintf(temp, "%c", board[i][j]);
 				fprintf(temp, "\n");
-			}
+			} //将这个位置替换成另一个赋值
 			fclose(temp);
 			if (!readPuzzle(path) || !dpll())
 			{
@@ -390,10 +392,10 @@ int puzzleGen(int difficulty,int m)
 				}
 				fclose(temp);
 				k--;
-			}
+			} //挖空后有唯一解，挖空
 			else
-				board[i][j] = '1';
-		}
+				board[i][j] = '1'; //没有唯一解，不能挖空
+		} //这个空是1
 		else if (board[i][j] == '0')
 		{
 			board[i][j] = '1';
@@ -405,7 +407,7 @@ int puzzleGen(int difficulty,int m)
 				for (int j = 0;j < m;j++)
 					fprintf(temp, "%c", board[i][j]);
 				fprintf(temp, "\n");
-			}
+			} //替换为另一个赋值
 			fclose(temp);
 			if (!readPuzzle(path) || !dpll())
 			{
@@ -420,9 +422,9 @@ int puzzleGen(int difficulty,int m)
 				}
 				fclose(temp);
 				k--;
-			}
+			} //有唯一解，可以挖空
 			else
-				board[i][j] = '0';
-		}
+				board[i][j] = '0'; //没有唯一解，不能挖空
+		} //是0
 	}
 }

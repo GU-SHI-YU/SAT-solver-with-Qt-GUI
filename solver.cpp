@@ -176,7 +176,22 @@ int dpll()
 			} //单子句变元赋值
 		}
 	} //单调变元优化
-    int v = getLiteralMinLen();
+    int v;
+    switch (branching_mode)
+    {
+    case 0:
+        v = getFirst();
+        break;
+    case 1:
+        v = getLiteralDLCS();
+        break;
+    case 2:
+        v = getLiteralMinLen();
+        break;
+    case 3:
+        v = getLiteral2SJW();
+        break;
+    }
 	//printf("%d ", v);
 	//for (i = 0;i < n_clauses;i++)
 	//	if (clauses[i].is_satisfied == NO)
@@ -270,7 +285,7 @@ void init()
 		assign[i].depth = 0;
 		assign[i].decision = ASSIGN_NONE;
 	}
-	fout = fopen("D:\\sudoku.out", "w");
+	fout = fopen(".\\CNF.out", "w");
 	free(clauses);
 	clauses = NULL;
 	n_clauses = 0;
