@@ -433,3 +433,5 @@ setting.json
 *.tex
 *.gz
 
+*.cud
+*.out
