@@ -228,14 +228,14 @@ void preprocessMonotoneLiteralFixing()
 int preprocessor()
 {
 	int total_changes_occured, n_s = 0;
-	if (n_clauses < 500)
-		n_resolvents_threshold = n_clauses * 5;
-	else if (n_clauses < 1000)
-		n_resolvents_threshold = n_clauses * 4;
-	else if (n_clauses < 2500)
-		n_resolvents_threshold = n_clauses * 2.5;
-	else
-		n_resolvents_threshold = n_clauses;
+    if (n_clauses < 500)
+        n_resolvents_threshold = n_clauses * 2.5;
+    else if (n_clauses < 1000)
+        n_resolvents_threshold = n_clauses * 2;
+    else if (n_clauses < 2500)
+        n_resolvents_threshold = n_clauses * 1.5;
+    else
+        n_resolvents_threshold = n_clauses;
 	while (true)
 	{
 		total_changes_occured = 0;
@@ -244,18 +244,18 @@ int preprocessor()
 		total_changes_occured += changes_occured;
 		preprocessMonotoneLiteralFixing(); //预处理单调变元简化
 		total_changes_occured += changes_occured;
-		//if(resolvents_added < n_resolvents_threshold)
-		//{
-		//	int i;
-		//	for (i = 1;i <= n_vars;i++)
-		//		if (assign[i].decision == ASSIGN_NONE)
-		//			if (getRestrictedResolvent(i, 3) == 0)
-		//			{
-		//				printf("over\n");
-		//				break;
-		//			}
-		//	total_changes_occured += changes_occured;
-		//} //预处理求解
+        if(resolvents_added < n_resolvents_threshold)
+        {
+            int i;
+            for (i = 1;i <= n_vars;i++)
+                if (assign[i].decision == ASSIGN_NONE)
+                    if (getRestrictedResolvent(i, 3) == 0)
+                    {
+                        printf("over\n");
+                        break;
+                    }
+            total_changes_occured += changes_occured;
+        } //预处理求解
 		preprocessSubsume(); //预处理包含子句简化
 		total_changes_occured += changes_occured;
 		if (total_changes_occured == 0)
@@ -368,6 +368,7 @@ int reader(char* path)
 		{
 			fscanf(fp,"%s", bin);
 			fscanf(fp,"%d%d", &n_vars, &n_c); //获取子句数，变元数
+			fprintf(fout, "p cnf %d %d\n", n_vars, n_c);
 			fgetc(fp);
 		}
 		else
@@ -397,7 +398,7 @@ int reader(char* path)
 				res_size -= 30; //过长子句头部处理
 				while (res_size > 30)
 				{
-					temp[0] = n_vars;
+                    temp[0] = -n_vars;
 					int k;
 					for (k = 1;k < 30;k++)
 					{
@@ -425,13 +426,11 @@ int reader(char* path)
 	}
 	fclose(fp);
 	free(literals);
-	if (!preprocessor())
-	{
-		fclose(fout);
-		return UNSATISFIABLE;
-	}
-    fseek(fout, 0, SEEK_SET);
-	fprintf(fout, "p cnf %d %d\n", n_vars, n_clauses);
+    if (!preprocessor())
+    {
+        fclose(fout);
+        return UNSATISFIABLE;
+    }
 	fclose(fout);
 	return 1;
 }

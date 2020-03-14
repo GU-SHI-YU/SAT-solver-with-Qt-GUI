@@ -239,17 +239,17 @@ void SATSolverQt::on_solveSAT_clicked()
 {
     ui->showAns->clear();
     branching_mode = ui->chooseBranching->currentIndex();
-    clock_t begin = clock();
+    begin = clock();
     if(!reader(cnfPath))
     {
-        clock_t end = clock();
+        end = clock();
         ui->showAns->appendPlainText("所用时间："+QString::number(end-begin)+"ms");
         ui->showAns->appendPlainText("无法满足！");
         return;
     }
     if(dpll())
     {
-        clock_t end = clock();
+        end = clock();
         ui->showAns->appendPlainText("所用时间："+QString::number(end-begin)+"ms");
         for(int i = 1;i <= n_vars;i++)
         {
@@ -261,8 +261,9 @@ void SATSolverQt::on_solveSAT_clicked()
     }
     else
     {
-        clock_t end = clock();
+        end = clock();
         ui->showAns->appendPlainText("所用时间："+QString::number(end-begin)+"ms");
         ui->showAns->appendPlainText("无法满足！");
     }
+    ui->showAns->moveCursor(QTextCursor::Start);
 }

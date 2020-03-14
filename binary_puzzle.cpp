@@ -205,8 +205,6 @@ int readPuzzle(char* path)
 		fclose(fout);
 		return UNSATISFIABLE;
 	}
-	fseek(fout, 0, SEEK_SET);
-	fprintf(fout,"p cnf %d %d\n", n_vars, n_clauses);
 	fclose(fout);
 	return 1;
 }

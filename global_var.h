@@ -2,6 +2,7 @@
 
 #include "define.h"
 #include <stdio.h>
+#include <time.h>
 
 typedef struct literal_info
 {
@@ -81,3 +82,6 @@ static int editable[8][8]; //鸽子是否可以编辑
 static int puzzle_size; //数独大小
 
 static int branching_mode; //分支策略
+
+static clock_t begin; //开始时间
+static clock_t end; //结束时间

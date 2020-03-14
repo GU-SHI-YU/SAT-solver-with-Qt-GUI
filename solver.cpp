@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <satsolverqt.h>
 
 void setVar(int v)
 {
@@ -132,6 +133,7 @@ int dpll()
 			assign[abs(implied_lit)].type = implied_lit > 0 ? TRUE : FALSE;
 			assign[abs(implied_lit)].depth = depth;
 			assign[abs(implied_lit)].decision = ASSIGN_IMPLIED;
+            //qDebug("$%d$",implied_lit);
 			setVar(implied_lit);
 			n_units++;
 		} //没有矛盾子句，为单子句变元赋值
@@ -141,41 +143,41 @@ int dpll()
 	if (!r_clauses)
 		return SATISFIABLE;
 	int i;
-	for (i = 1; i <= n_vars; i++)
-	{
-		int x, y, u, C;
-		x = y = 0;
-		if (assign[i].decision == ASSIGN_NONE)
-		{
-			u = 0;
-			int j;
-			for (j = 0;j < l_info[i][SATISFIED].n_occur;j++)
-			{
-				C = l_info[i][SATISFIED].lit_in_clauses[j];
-				x += 1 - clauses[C].is_satisfied;
-			}
-			for (j = 0; j < l_info[i][SHRUNK].n_occur; j++)
-			{
-				C = l_info[i][SHRUNK].lit_in_clauses[j];
-				y += 1 - clauses[C].is_satisfied;
-			}
-			if (x && !y)
-				u = i;
-			if (y && !x)
-				u = -i;
-			if (u)
-			{
-				ml_stack = (int*)realloc(ml_stack, (n_ml + 1) * sizeof(int));
-				if (!ml_stack)
-					exit(-1);
-				ml_stack[n_ml++] = u;
-				assign[abs(u)].type = (u > 0) ? TRUE : FALSE;
-				assign[abs(u)].depth = depth;
-				assign[abs(u)].decision = ASSIGN_IMPLIED;
-				setVar(u);
-			} //单子句变元赋值
-		}
-	} //单调变元优化
+    for (i = 1; i <= n_vars; i++)
+    {
+        int x, y, u, C;
+        x = y = 0;
+        if (assign[i].decision == ASSIGN_NONE)
+        {
+            u = 0;
+            int j;
+            for (j = 0;j < l_info[i][SATISFIED].n_occur;j++)
+            {
+                C = l_info[i][SATISFIED].lit_in_clauses[j];
+                x += 1 - clauses[C].is_satisfied;
+            }
+            for (j = 0; j < l_info[i][SHRUNK].n_occur; j++)
+            {
+                C = l_info[i][SHRUNK].lit_in_clauses[j];
+                y += 1 - clauses[C].is_satisfied;
+            }
+            if (x && !y)
+                u = i;
+            if (y && !x)
+                u = -i;
+            if (u)
+            {
+                ml_stack = (int*)realloc(ml_stack, (n_ml + 1) * sizeof(int));
+                if (!ml_stack)
+                    exit(-1);
+                ml_stack[n_ml++] = u;
+                assign[abs(u)].type = (u > 0) ? TRUE : FALSE;
+                assign[abs(u)].depth = depth;
+                assign[abs(u)].decision = ASSIGN_IMPLIED;
+                setVar(u);
+            } //单子句变元赋值
+        }
+    } //单调变元优化
     int v;
     switch (branching_mode)
     {
@@ -192,13 +194,13 @@ int dpll()
         v = getLiteral2SJW();
         break;
     }
-	//printf("%d ", v);
 	//for (i = 0;i < n_clauses;i++)
 	//	if (clauses[i].is_satisfied == NO)
 	//		printf("%d ", i);
 	assign[abs(v)].type = (v > 0) ? TRUE : FALSE;
 	assign[abs(v)].depth = depth;
 	assign[abs(v)].decision = ASSIGN_BRANCHED;
+    //qDebug("#%d#",v);
 	setVar(v); //按照分裂规则为变元赋值
 	if (dpll())
 		return SATISFIABLE;
@@ -227,6 +229,7 @@ int dpll()
 		assign[abs(v)].type = !assign[abs(v)].type;
 		assign[abs(v)].depth = depth;
 		assign[abs(v)].decision = ASSIGN_IMPLIED;
+        //qDebug("#%d#",-v);
 		setVar(-v);
 		if (dpll())
 			return SATISFIABLE;
